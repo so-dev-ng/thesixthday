@@ -56,11 +56,13 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="box">
+        <div className="App-title">더식스데이 프론트엔드 과제</div>
+        <div className="App-name">지원자 : 송윤지</div>
+        <div className="App-container">
           {items.map((item, idx) => (
-            <div className="container" key={idx}>
-              <img className="img" src={item.thumb_small_img} alt={''}></img>
-              <div className="title">{item.title}</div>
+            <div className="App-box" key={idx}>
+              <img className="App-box-img" src={item.thumb_small_img} alt={''}></img>
+              <div className="App-box-title">{item.title}</div>
             </div>
           ))}
         </div>
