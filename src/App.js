@@ -1,10 +1,13 @@
 import './App.css';
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { setItems, nextPage } from './module';
+import { setItems } from './module';
 import axios from 'axios';
 
 function App() {
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const { items, pages } = useSelector(state => ({
     items: state.items,
     pages: state.pages
@@ -12,21 +15,21 @@ function App() {
 
   const dispatch = useDispatch();
   const onSetItems = item => dispatch(setItems(item));
-  const onNextPage = () => dispatch(nextPage());
 
   const loadMoreItems = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(`http://dev.dolobox.co/api/get/items/${pages}`);
       const message = await response.data.msg;
       if (message === 'success') {
         const newItems = await response.data.data;
         onSetItems(newItems);
-        onNextPage(pages + 1);
       } else if (message === 'empty') {
-        alert('마지막 페이지입니다.');
+        setError('마지막 페이지입니다 😢')
       } else if (message === 'error') {
         alert('error: 조회 실패');
       }
+      setLoading(false);
     } catch (err) {
       alert('error: 비동기 처리 실패');
       console.log(err);
@@ -38,7 +41,7 @@ function App() {
     const scrollTop = document.documentElement.scrollTop;
     const clientHeight = document.documentElement.clientHeight;
 
-    if (scrollTop + clientHeight >= scrollHeight) loadMoreItems();
+    if (scrollTop + clientHeight >= scrollHeight && !loading) loadMoreItems();
   }
 
   useEffect(() => {
@@ -66,6 +69,7 @@ function App() {
             </div>
           ))}
         </div>
+        {error && <div className="App-error">{error}</div>}
       </header>
     </div>
   );
