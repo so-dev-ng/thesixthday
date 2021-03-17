@@ -7,9 +7,22 @@ function App() {
   const [pages, setPages] = useState(0);
 
   const loadMoreItems = async () => {
-    const newItems = (await axios.get(`http://dev.dolobox.co/api/get/items/${pages}`)).data.data;
-    setItems(items.concat(newItems));
-    setPages(pages + 1);
+    try {
+      const response = await axios.get(`http://dev.dolobox.co/api/get/items/${pages}`);
+      const message = await response.data.msg;
+      if (message === 'success') {
+        const newItems = await response.data.data;
+        setItems(items.concat(newItems));
+        setPages(pages + 1);
+      } else if (message === 'empty') {
+        alert('마지막 페이지입니다.');
+      } else if (message === 'error') {
+        alert('error: 조회 실패');
+      }
+    } catch (err) {
+      alert('error: 비동기 처리 실패');
+      console.log(err);
+    }
   }
   //컨텐트 불러오기 <div dangerouslySetInnerHTML={{ __html: item.contents }}></div>
 
@@ -20,19 +33,17 @@ function App() {
 
     if (scrollTop + clientHeight >= scrollHeight) loadMoreItems();
   }
-  useEffect(() => {
-    loadMoreItems();
-    // eslint-disable-next-line 
-  }, [])
 
-  // useEffect(() => {
-  //   const firstLoad = async () => {
-  //     const newItems = (await axios.get('http://dev.dolobox.co/api/get/items/0')).data.data;
-  //     setItems(items.concat(newItems));
-  //     setPages(pages + 1);
-  //   }
-  //   firstLoad();
-  // }, [])
+  useEffect(() => {
+    // const firstLoad = async () => {
+    //   const newItems = (await axios.get('http://dev.dolobox.co/api/get/items')).data.data;
+    //   setItems(items => items.concat(newItems));
+    //   setPages(pages => pages + 1);
+    // }
+    // firstLoad();
+    loadMoreItems();
+    // eslint-disable-next-line
+  }, [])
 
   useEffect(() => {
     window.addEventListener('scroll', loadItems);
@@ -44,12 +55,14 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {items.map((item, idx) => (
-          <div className="container" key={idx}>
-            <div className="img">{item.thumb_small_img}</div>
-            <div className="title">{item.title}</div>
-          </div>
-        ))}
+        <div className="box">
+          {items.map((item, idx) => (
+            <div className="container" key={idx}>
+              <div className="img">{item.thumb_small_img}</div>
+              <div className="title">{item.title}</div>
+            </div>
+          ))}
+        </div>
       </header>
     </div>
   );

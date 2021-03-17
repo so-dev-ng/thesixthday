@@ -18,6 +18,17 @@
   color: white;
 }
 
+.box {
+  margin-top: 300px;
+  width: 1000px;
+  border: 2px solid white;
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  flex-flow: wrap;
+  justify-content: center;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -25,6 +36,7 @@
   border: 1px solid black;
   padding: 40px 10px 40px 10px;
   width: 200px;
+  margin: 20px;
 }
 
 .img {
