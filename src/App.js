@@ -1,8 +1,8 @@
 import './App.css';
-import axios from 'axios';
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { setItems, nextPage } from './reducer';
+import { setItems, nextPage } from './module';
+import axios from 'axios';
 
 function App() {
   const { items, pages } = useSelector(state => ({
@@ -33,7 +33,6 @@ function App() {
     }
   }
 
-
   const loadItems = async () => {
     const scrollHeight = document.documentElement.scrollHeight;
     const scrollTop = document.documentElement.scrollTop;
@@ -43,14 +42,6 @@ function App() {
   }
 
   useEffect(() => {
-    // // way to escape 'react eslint' 
-    // const firstLoad = async () => {
-    //   const newItems = (await axios.get('http://dev.dolobox.co/api/get/items')).data.data;
-    //   setItems(items => items.concat(newItems));
-    //   setPages(pages => pages + 1);
-    // }
-    // firstLoad();
-
     loadMoreItems();
     // eslint-disable-next-line
   }, [])
@@ -68,7 +59,7 @@ function App() {
         <div className="box">
           {items.map((item, idx) => (
             <div className="container" key={idx}>
-              <div className="img">{item.thumb_small_img}</div>
+              <img className="img" src={item.thumb_small_img} alt={''}></img>
               <div className="title">{item.title}</div>
             </div>
           ))}
