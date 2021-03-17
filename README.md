@@ -27,16 +27,15 @@ Redux 공식 Github에서는 위 3개를 다 다른 폴더를 만들어 관리�
 관련 내용은 [여기](https://react.vlpt.us/redux/)를 참고했습니다. 
 
 ### Hooks 와 Redux의 구분
-`App.js` 에서 ___error message___와 ___loading의 여부___는 Hooks로 관리하고, ___items___는 Redux로 관리했습니다.
-이렇게 나눈 이유는 ___error message___와 ___loading의 여부___는 App 컴포넌트가 렌더링 되어있을 때만 필요한 state라고 생각했습니다. 즉, App이 아닌 다른 컴포넌트와의 state 공유가 불필요한 state라고 판단되어 Redux보다 간편한 Hooks를 사용해 상태 관리 했습니다. 
-___items___의 경우, App 컴포넌트에서 가장 중요한 데이터이고 추후에 다른 컴포넌트에서 사용될 수 있는 가능성이 있다고 판단되어 Redux를 사용했습니다.
+`App.js` 에서 ___error message___ 와 ___loading의 여부___ 는 Hooks로 관리하고, ___items___ 는 Redux로 관리했습니다.
+이렇게 나눈 이유는 ___error message___ 와 ___loading의 여부___ 는 App 컴포넌트가 렌더링 되어있을 때만 필요한 state라고 생각했습니다. 즉, App이 아닌 다른 컴포넌트와의 state 공유가 불필요한 state라고 판단되어 Redux보다 간편한 Hooks를 사용해 상태 관리 했습니다. 
+___items___ 의 경우, App 컴포넌트에서 가장 중요한 데이터이고 추후에 다른 컴포넌트에서 사용될 수 있는 가능성이 있다고 판단되어 Redux를 사용했습니다.
 위 내용은 프로젝트의 상황에 따라 충분히 변경 가능하다고 생각합니다. 
 
 ## 3. 코드에는 없으나 추가로 공부한 내용
 ### react에서 html태그 불러오기
 
 `dangerouslySetInnerHTML` 속성을 사용합니다. </br>
-**예시**
 
 ```jsx
 <div dangerouslySetInnerHTML={{ __html: item.contents }}></div>
