@@ -1,10 +1,18 @@
 import './App.css';
 import axios from 'axios';
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { setItems, nextPage } from './reducer';
 
 function App() {
-  const [items, setItems] = useState([]);
-  const [pages, setPages] = useState(0);
+  const { items, pages } = useSelector(state => ({
+    items: state.items,
+    pages: state.pages
+  }))
+
+  const dispatch = useDispatch();
+  const onSetItems = item => dispatch(setItems(item));
+  const onNextPage = () => dispatch(nextPage());
 
   const loadMoreItems = async () => {
     try {
@@ -12,8 +20,8 @@ function App() {
       const message = await response.data.msg;
       if (message === 'success') {
         const newItems = await response.data.data;
-        setItems(items.concat(newItems));
-        setPages(pages + 1);
+        onSetItems(newItems);
+        onNextPage(pages + 1);
       } else if (message === 'empty') {
         alert('마지막 페이지입니다.');
       } else if (message === 'error') {
@@ -24,7 +32,7 @@ function App() {
       console.log(err);
     }
   }
-  //컨텐트 불러오기 <div dangerouslySetInnerHTML={{ __html: item.contents }}></div>
+
 
   const loadItems = async () => {
     const scrollHeight = document.documentElement.scrollHeight;
@@ -35,12 +43,14 @@ function App() {
   }
 
   useEffect(() => {
+    // // way to escape 'react eslint' 
     // const firstLoad = async () => {
     //   const newItems = (await axios.get('http://dev.dolobox.co/api/get/items')).data.data;
     //   setItems(items => items.concat(newItems));
     //   setPages(pages => pages + 1);
     // }
     // firstLoad();
+
     loadMoreItems();
     // eslint-disable-next-line
   }, [])
